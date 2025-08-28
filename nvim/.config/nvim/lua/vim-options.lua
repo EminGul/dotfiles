@@ -40,3 +40,6 @@ vim.o.signcolumn = "yes"
 vim.diagnostic.config({
     update_in_insert = true,
 })
+
+-- Keymaps
+vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { buffer = bufnr })

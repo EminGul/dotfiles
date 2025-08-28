@@ -1,7 +1,9 @@
 return {
     { -- Install lspconfig
         "neovim/nvim-lspconfig",
-        event = { "BufReadPre", "BufNewFile" },
+        dependencies = {
+            'saghen/blink.cmp',
+        }
     },
     { -- Install Mason
         "williamboman/mason.nvim",
@@ -9,25 +11,40 @@ return {
             require("mason").setup()
         end,
     },
-    { -- Install cmp-nvim-lsp 
-        "hrsh7th/cmp-nvim-lsp",
-        dependencies = { "nvim-cmp" },
-    },
     { -- Mason-lspconfig maps the mason name to its respective lsp-config name for the language setup (eg. lspconfig.[language].setup())
         "williamboman/mason-lspconfig.nvim",
-        dependencies = { "mason.nvim", "cmp-nvim-lsp" },
+        dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
         config = function()
-            local capabilities = require("cmp_nvim_lsp").default_capabilities()
+            local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-            require("mason-lspconfig").setup()
+            require("lspconfig").lua_ls.setup({
+                settings = {
+                    Lua = {
+                        diagnostics = {
+                            globals = { "vim" },
+                        },
+                    },
+                },
+            })
 
-            -- Add LSP configurations
-            require("mason-lspconfig").setup_handlers({
-                function(server_name)
-                    require("lspconfig")[server_name].setup({
-                        capabilities = capabilities,
-                    })
-                end,
+            -- Default handlers
+            require("mason-lspconfig").setup({
+                ensure_installed = {
+                    "lua_ls",       -- lua
+                    "pyright",      -- python
+                    "clangd",       -- C/C++
+                    "ts_ls",        -- JS/TS
+                    "html",         -- HTML
+                    "cssls",        -- CSS
+                    "jsonls",       -- JSON
+                },
+
+                handlers = {
+                    -- Default Handler
+                    function(server_name)
+                        require("lspconfig")[server_name].setup({ capabilities = capabilities })
+                    end,
+                }
             })
         end,
     }
