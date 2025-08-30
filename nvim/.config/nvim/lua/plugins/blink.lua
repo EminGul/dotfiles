@@ -24,6 +24,7 @@ return {
             -- Only lsp/path suggestions - no snippets
             default = { "lsp", "path" },
         },
+        signature = { enabled = true },
 
         fuzzy = { implementation = "prefer_rust_with_warning" }
     },

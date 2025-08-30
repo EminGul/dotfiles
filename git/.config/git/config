@@ -1,0 +1,36 @@
+[user]
+    name = Emin Guliyev
+    email = emin.guliyev@mail.utoronto.ca
+
+[core]
+    editor = nvim
+    ignorecase = false
+    excludesfile = ~/.gitignore
+
+[init]
+    defaultBranch = main
+
+[push]
+    default = simple
+    autoSetupRemote = true
+
+[pull]
+    default = current
+    rebase = true
+
+[rebase]
+    autoStash = true
+    missingCommitsCheck = warn
+
+[status]
+    branch = true
+    showStash = true
+    showUntrackedFiles = all
+
+[color]
+    status = auto
+    diff = auto
+    branch = auto
+    iteractive = auto
+    grep = auto
+    ui = auto
