@@ -47,5 +47,14 @@ return {
                 }
             })
         end,
+    },
+    {
+        "rachartier/tiny-inline-diagnostic.nvim",
+        event = "LspAttach",
+        config = function()
+            require("tiny-inline-diagnostic").setup({
+                preset = "classic",
+            })
+        end,
     }
 }
