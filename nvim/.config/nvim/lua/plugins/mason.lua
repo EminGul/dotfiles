@@ -1,53 +1,65 @@
 return {
-    { -- Install lspconfig
+    { -- nvim-lspconfig still needed for the server configs
         "neovim/nvim-lspconfig",
         dependencies = {
-            'saghen/blink.cmp',
-        }
+            "saghen/blink.cmp",
+        },
     },
-    { -- Install Mason
+
+    { -- Mason
         "williamboman/mason.nvim",
         config = function()
             require("mason").setup()
         end,
     },
-    { -- Mason-lspconfig maps the mason name to its respective lsp-config name for the language setup (eg. lspconfig.[language].setup())
+
+    {
+        -- Mason-lspconfig: installs + auto-enables servers
         "williamboman/mason-lspconfig.nvim",
         dependencies = { "williamboman/mason.nvim", "neovim/nvim-lspconfig" },
         config = function()
             local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-            require("lspconfig").lua_ls.setup({
-                settings = {
-                    Lua = {
-                        diagnostics = {
-                            globals = { "vim" },
-                        },
-                    },
-                },
-            })
+            -- list of servers you care about
+            local servers = {
+                "lua_ls",   -- Lua
+                "pyright",  -- Python
+                "clangd",   -- C/C++
+                "ts_ls",    -- JS/TS
+                "html",     -- HTML
+                "cssls",    -- CSS
+                "jsonls",   -- JSON
+            }
 
-            -- Default handlers
-            require("mason-lspconfig").setup({
-                ensure_installed = {
-                    "lua_ls",       -- lua
-                    "pyright",      -- python
-                    "clangd",       -- C/C++
-                    "ts_ls",        -- JS/TS
-                    "html",         -- HTML
-                    "cssls",        -- CSS
-                    "jsonls",       -- JSON
-                },
-
-                handlers = {
-                    -- Default Handler
-                    function(server_name)
-                        require("lspconfig")[server_name].setup({ capabilities = capabilities })
-                    end,
+            -- per-server config using the NEW API
+            for _, server in ipairs(servers) do
+                local cfg = {
+                    capabilities = capabilities,
                 }
+
+                if server == "lua_ls" then
+                    cfg.settings = {
+                        Lua = {
+                            diagnostics = {
+                                globals = { "vim" },
+                            },
+                        },
+                    }
+                end
+
+                -- define/extend the config
+                vim.lsp.config(server, cfg)
+            end
+
+            -- let mason-lspconfig ensure they’re installed
+            require("mason-lspconfig").setup({
+                ensure_installed = servers,
+                -- automatic_enable is true by default; you can make it explicit:
+                -- automatic_enable = true,
             })
         end,
     },
+
     {
         "rachartier/tiny-inline-diagnostic.nvim",
         event = "LspAttach",
@@ -56,5 +68,5 @@ return {
                 preset = "classic",
             })
         end,
-    }
+    },
 }
