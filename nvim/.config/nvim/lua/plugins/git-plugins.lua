@@ -1,21 +1,19 @@
 return {
-    {   -- Lazygit.nvim
-        "kdheepak/lazygit.nvim",
-        cmd = {
-            "LazyGit",
-            "LazyGitConfig",
-            "LazyGitCurrentFile",
-            "LazyGitFilter",
-            "LazyGitFilterCurrentFile",
-        },
-
+    {   -- Neogit
+        "NeogitOrg/neogit",
         dependencies = {
             "nvim-lua/plenary.nvim",
+            "sindrets/diffview.nvim",
         },
-
+        cmd = { "Neogit" },
         keys = {
-            { "<leader>lg", "<cmd>LazyGit<cr>", desc = "LazyGit" }
-        }
+            { "<leader>gg", "<cmd>Neogit<cr>", desc = "Open Neogit" },
+        },
+        opts = {
+            integrations = {
+                diffview = true,
+            },
+        },
     },
     {   -- Gitsigns.nvim
         "lewis6991/gitsigns.nvim",

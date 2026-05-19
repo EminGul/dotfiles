@@ -4,6 +4,24 @@ return {
         dependencies = {
             "saghen/blink.cmp",
         },
+        config = function()
+            vim.api.nvim_create_autocmd("LspAttach", {
+                callback = function(event)
+                    local map = function(lhs, rhs, desc)
+                        vim.keymap.set("n", lhs, rhs, { buffer = event.buf, desc = desc })
+                    end
+                    map("gd",          vim.lsp.buf.definition,    "Go to definition")
+                    map("gD",          vim.lsp.buf.declaration,   "Go to declaration")
+                    map("gi",          vim.lsp.buf.implementation,"Go to implementation")
+                    map("gr",          vim.lsp.buf.references,    "Go to references")
+                    map("K",           vim.lsp.buf.hover,         "Hover documentation")
+                    map("<leader>rn",  vim.lsp.buf.rename,        "Rename symbol")
+                    map("<leader>ca",  vim.lsp.buf.code_action,   "Code action")
+                    map("[d",          vim.diagnostic.goto_prev,  "Previous diagnostic")
+                    map("]d",          vim.diagnostic.goto_next,  "Next diagnostic")
+                end,
+            })
+        end,
     },
 
     { -- Mason
@@ -20,9 +38,8 @@ return {
         config = function()
             local capabilities = require("blink.cmp").get_lsp_capabilities()
 
-            -- list of servers you care about
             local servers = {
-                "lua_ls",   -- Lua
+                "lua_ls",   -- Lua (types provided by lazydev.nvim)
                 "pyright",  -- Python
                 "clangd",   -- C/C++
                 "ts_ls",    -- JS/TS
@@ -31,41 +48,12 @@ return {
                 "jsonls",   -- JSON
             }
 
-            -- per-server config using the NEW API
             for _, server in ipairs(servers) do
-                local cfg = {
-                    capabilities = capabilities,
-                }
-
-                if server == "lua_ls" then
-                    cfg.settings = {
-                        Lua = {
-                            diagnostics = {
-                                globals = { "vim" },
-                            },
-                        },
-                    }
-                end
-
-                -- define/extend the config
-                vim.lsp.config(server, cfg)
+                vim.lsp.config(server, { capabilities = capabilities })
             end
 
-            -- let mason-lspconfig ensure they’re installed
             require("mason-lspconfig").setup({
                 ensure_installed = servers,
-                -- automatic_enable is true by default; you can make it explicit:
-                -- automatic_enable = true,
-            })
-        end,
-    },
-
-    {
-        "rachartier/tiny-inline-diagnostic.nvim",
-        event = "LspAttach",
-        config = function()
-            require("tiny-inline-diagnostic").setup({
-                preset = "classic",
             })
         end,
     },

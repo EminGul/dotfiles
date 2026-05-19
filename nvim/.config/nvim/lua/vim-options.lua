@@ -41,5 +41,10 @@ vim.diagnostic.config({
     update_in_insert = true,
 })
 
+-- Indenting
+vim.opt.autoindent = true
+vim.opt.smartindent = true
+
 -- Keymaps
-vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { buffer = bufnr })
+vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Open diagnostic float" })
+

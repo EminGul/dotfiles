@@ -6,6 +6,8 @@
     editor = nvim
     ignorecase = false
     excludesfile = ~/.gitignore
+    autocrlf = false
+    eol = lf
 
 [init]
     defaultBranch = main

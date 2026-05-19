@@ -63,3 +63,5 @@ shada/
 .nvim/
 .nvimlog
 
+
+**/.claude/settings.local.json
