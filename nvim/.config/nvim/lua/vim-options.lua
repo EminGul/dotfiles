@@ -47,4 +47,6 @@ vim.opt.smartindent = true
 
 -- Keymaps
 vim.keymap.set("n", "<leader>d", vim.diagnostic.open_float, { desc = "Open diagnostic float" })
+vim.keymap.set("n", "<C-s>", ":%s/", { desc = "Search and replace (whole file)" })
+vim.keymap.set("n", "<Esc>", "<cmd>noh<CR><Esc>", { desc = "Clear search highlight", silent = true })
 

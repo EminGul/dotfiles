@@ -33,6 +33,11 @@ return {
             { "<leader>d",  desc = "Open diagnostic float" },
 
             -- ----------------------------------------------------------------
+            -- Search (vim-options.lua)
+            -- ----------------------------------------------------------------
+            { "<Esc>", desc = "Clear search highlight", mode = { "n" } },
+
+            -- ----------------------------------------------------------------
             -- Find / Telescope (telescope.lua)
             -- NOTE: <leader>g is also mapped to live grep in telescope.lua.
             -- That mapping coexists with the git group via timeoutlen; which-key
@@ -97,6 +102,7 @@ return {
             { "<c-y>",  desc = "cd to directory (telescope file browser)", mode = { "n" } },
             { "<c-o>",  desc = "Jump back (jumplist)",                   mode = { "n" } },
             { "<c-i>",  desc = "Jump forward (jumplist)",                mode = { "n" } },
+            { "<c-s>",  desc = "Search and replace (whole file)",        mode = { "n" } },
         })
     end,
 }
