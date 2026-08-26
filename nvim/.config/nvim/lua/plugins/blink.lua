@@ -24,7 +24,11 @@ return {
             -- Only lsp/path suggestions - no snippets
             default = { "lsp", "path" },
         },
-        signature = { enabled = true },
+        -- Auto-shows params + docs while typing inside (), highlights active param
+        signature = {
+            enabled = true,
+            window = { border = "rounded", show_documentation = true },
+        },
 
         fuzzy = { implementation = "prefer_rust_with_warning" }
     },

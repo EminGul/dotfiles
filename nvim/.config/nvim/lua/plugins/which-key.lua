@@ -3,7 +3,14 @@ return {
     event = "VeryLazy",
     config = function()
         local wk = require("which-key")
-        wk.setup()
+        wk.setup {
+            win = {
+                border = "rounded",
+                wo = {
+                    winblend = 0,
+                },
+            },
+        }
 
         wk.add({
             -- ----------------------------------------------------------------

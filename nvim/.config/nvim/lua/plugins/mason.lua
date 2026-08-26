@@ -5,6 +5,17 @@ return {
             "saghen/blink.cmp",
         },
         config = function()
+            -- Close the hover float if it's still open instead of reopening it
+            local function toggle_hover()
+                local bufnr = vim.api.nvim_get_current_buf()
+                local winid = vim.b[bufnr].lsp_floating_preview
+                if winid and vim.api.nvim_win_is_valid(winid) then
+                    vim.api.nvim_win_close(winid, true)
+                else
+                    vim.lsp.buf.hover()
+                end
+            end
+
             vim.api.nvim_create_autocmd("LspAttach", {
                 callback = function(event)
                     local map = function(lhs, rhs, desc)
@@ -14,7 +25,7 @@ return {
                     map("gD",          vim.lsp.buf.declaration,   "Go to declaration")
                     map("gi",          vim.lsp.buf.implementation,"Go to implementation")
                     map("gr",          vim.lsp.buf.references,    "Go to references")
-                    map("K",           vim.lsp.buf.hover,         "Hover documentation")
+                    map("K",           toggle_hover,              "Toggle hover documentation")
                     map("<leader>rn",  vim.lsp.buf.rename,        "Rename symbol")
                     map("<leader>ca",  vim.lsp.buf.code_action,   "Code action")
                     map("[d",          vim.diagnostic.goto_prev,  "Previous diagnostic")
